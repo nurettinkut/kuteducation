@@ -1,0 +1,63 @@
+import React, { useState } from "react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+
+export default function KutEducationalCenter() {
+  const [questions, setQuestions] = useState([]);
+  const [title, setTitle] = useState("");
+  const [image, setImage] = useState(null);
+
+  const handleAddQuestion = () => {
+    if (!title || !image) return;
+    const newQuestion = {
+      id: Date.now(),
+      title,
+      image: URL.createObjectURL(image),
+    };
+    setQuestions([newQuestion, ...questions]);
+    setTitle("");
+    setImage(null);
+  };
+
+  return (
+    <div className="p-6 max-w-5xl mx-auto">
+      <h1 className="text-3xl font-bold mb-6">KUT Educational Center</h1>
+
+      <Card className="mb-6">
+        <CardContent className="p-4 space-y-4">
+          <h2 className="text-xl font-semibold">Add Practice Question</h2>
+
+          <Input
+            placeholder="Enter question title"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+          />
+
+          <input
+            type="file"
+            accept="image/*"
+            onChange={(e) => setImage(e.target.files[0])}
+          />
+
+          <Button onClick={handleAddQuestion}>Add Question</Button>
+        </CardContent>
+      </Card>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {questions.map((q) => (
+          <Card key={q.id}>
+            <CardContent className="p-4">
+              <h3 className="font-semibold mb-2">{q.title}</h3>
+              <img
+                src={q.image}
+                alt="question"
+                className="rounded-xl w-full"
+              />
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+    </div>
+  );
+}
